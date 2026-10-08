@@ -42,7 +42,12 @@ func makeEvent(
         status: "confirmed",
         organizer: nil,
         attendees: [],
-        recurring: recurring
+        recurring: recurring,
+        externalId: nil,
+        seriesId: nil,
+        conferenceUrl: nil,
+        created: nil,
+        updated: nil
     )
 }
 

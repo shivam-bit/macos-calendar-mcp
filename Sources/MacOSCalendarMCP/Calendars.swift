@@ -150,8 +150,18 @@ public actor EventKitCalendars: CalendarSource {
             status: status(ekEvent.status),
             organizer: ekEvent.organizer.map(person(from:)),
             attendees: Person.stableOrder((ekEvent.attendees ?? []).map(person(from:))),
-            recurring: ekEvent.hasRecurrenceRules
+            recurring: ekEvent.hasRecurrenceRules,
+            externalId: ekEvent.calendarItemExternalIdentifier,
+            seriesId: ekEvent.hasRecurrenceRules ? seriesId(of: ekEvent) : nil,
+            conferenceUrl: ConferenceLink.find(url: ekEvent.url?.absoluteString, notes: ekEvent.notes, location: ekEvent.location),
+            created: ekEvent.creationDate.map(Dates.format),
+            updated: ekEvent.lastModifiedDate.map(Dates.format)
         )
+    }
+
+    private func seriesId(of ekEvent: EKEvent) -> String {
+        if let externalId = ekEvent.calendarItemExternalIdentifier, !externalId.isEmpty { return externalId }
+        return ekEvent.calendarItemIdentifier
     }
 
     private func calendar(from ekCalendar: EKCalendar, defaultId: String?) -> EventCalendar {

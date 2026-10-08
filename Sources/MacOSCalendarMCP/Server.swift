@@ -2,13 +2,15 @@ import Foundation
 import MCP
 
 public enum CalendarServer {
+    public static let version = "0.2.0"
+
     public static let tools: [ToolDefinition] = [
         ListCalendars.definition, ListEvents.definition, GetEvent.definition, SearchEvents.definition,
         CreateEvent.definition, UpdateEvent.definition, DeleteEvent.definition, GetChanges.definition,
     ]
 
     public static func start(context: ToolContext) async throws {
-        let server = Server(name: "macos-calendar-mcp", version: "0.1.0", capabilities: .init(tools: .init(listChanged: false)))
+        let server = Server(name: "macos-calendar-mcp", version: version, capabilities: .init(tools: .init(listChanged: false)))
         await server.withMethodHandler(ListTools.self) { _ in .init(tools: tools.map(\.tool)) }
         await server.withMethodHandler(CallTool.self) { params in
             await call(name: params.name, arguments: params.arguments ?? [:], context: context)

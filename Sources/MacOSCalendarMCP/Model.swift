@@ -87,11 +87,17 @@ public struct Event: Codable, Equatable, Sendable {
     public let organizer: Person?
     public let attendees: [Person]
     public let recurring: Bool
+    public let externalId: String?
+    public let seriesId: String?
+    public let conferenceUrl: String?
+    public let created: String?
+    public let updated: String?
 
     public init(
         id: String, start: String, end: String, allDay: Bool, title: String,
         calendarId: String, calendarName: String, location: String?, notes: String?, url: String?,
-        status: String, organizer: Person?, attendees: [Person], recurring: Bool
+        status: String, organizer: Person?, attendees: [Person], recurring: Bool,
+        externalId: String?, seriesId: String?, conferenceUrl: String?, created: String?, updated: String?
     ) {
         self.id = id
         self.start = start
@@ -107,5 +113,10 @@ public struct Event: Codable, Equatable, Sendable {
         self.organizer = organizer
         self.attendees = attendees
         self.recurring = recurring
+        self.externalId = externalId
+        self.seriesId = seriesId
+        self.conferenceUrl = conferenceUrl
+        self.created = created
+        self.updated = updated
     }
 }

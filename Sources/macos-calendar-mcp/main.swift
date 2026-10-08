@@ -1,6 +1,10 @@
 import MacOSCalendarMCP
 import Foundation
 
+if ListMode.isRequested(environment: ProcessInfo.processInfo.environment) {
+    exit(await ListMode.run(source: EventKitCalendars()))
+}
+
 do {
     let settings = try Settings.parse(arguments: CommandLine.arguments, environment: ProcessInfo.processInfo.environment)
     let context = ToolContext(

@@ -47,7 +47,8 @@ actor FakeCalendarSource: CalendarSource {
             id: EventID.format(externalId: "fake-\(createdCount)", localId: "", recurring: false, start: draft.start),
             start: Dates.format(draft.start), end: Dates.format(draft.end), allDay: draft.allDay, title: draft.title,
             calendarId: target.id, calendarName: target.name, location: draft.location, notes: draft.notes,
-            url: draft.url?.absoluteString, status: "confirmed", organizer: nil, attendees: [], recurring: false
+            url: draft.url?.absoluteString, status: "confirmed", organizer: nil, attendees: [], recurring: false,
+            externalId: nil, seriesId: nil, conferenceUrl: nil, created: nil, updated: nil
         )
         storedEvents.append(event)
         return event
@@ -62,7 +63,8 @@ actor FakeCalendarSource: CalendarSource {
             start: Dates.format(start), end: changes.end.map(Dates.format) ?? current.end, allDay: current.allDay,
             title: changes.title ?? current.title, calendarId: current.calendarId, calendarName: current.calendarName,
             location: changes.location ?? current.location, notes: changes.notes ?? current.notes, url: current.url,
-            status: current.status, organizer: current.organizer, attendees: current.attendees, recurring: current.recurring
+            status: current.status, organizer: current.organizer, attendees: current.attendees, recurring: current.recurring,
+            externalId: nil, seriesId: nil, conferenceUrl: nil, created: nil, updated: nil
         )
         storedEvents.removeAll { $0.id == current.id && $0.calendarId == current.calendarId }
         storedEvents.append(updated)

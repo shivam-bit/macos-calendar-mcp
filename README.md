@@ -63,8 +63,9 @@ The binary is `.build/release/macos-calendar-mcp`. To build the universal binary
 
 ## Releasing
 
-1. Tag the commit `vX.Y.Z` and push the tag. The release workflow builds the universal binary and attaches it to a GitHub release. It also publishes to npm if the repository has an `NPM_TOKEN` secret.
-2. To publish by hand, run `scripts/prepare-npm.sh`, then `npm publish` in `npm/`.
+1. Bump `CalendarServer.version` in `Sources/MacOSCalendarMCP/Server.swift` together with `version` in `npm/package.json`.
+2. Tag the commit `vX.Y.Z` and push the tag. The release workflow builds the universal binary and attaches it to a GitHub release. It also publishes to npm if the repository has an `NPM_TOKEN` secret.
+3. To publish by hand, run `scripts/prepare-npm.sh`, then `npm publish` in `npm/`.
 
 ## Privacy model
 
@@ -135,6 +136,17 @@ If `after` is older than the oldest deletion row the server still has, the reply
 
 After you unblock a calendar or account, its older rows sit below your offset. A host that needs them should resync from `after = 0`.
 
+## Listing every calendar
+
+Set `MACOS_CALENDAR_LIST_CALENDARS=1` to print every calendar as a JSON array on stdout and exit, without starting the server. This ignores the block list, so a host can offer the full list when it lets a user choose what to block. It never asks for Calendar access.
+
+- Exit code 0: the array is on stdout.
+- Exit code 1: Calendar access is not granted, and a message on stderr says where to allow it.
+
+```sh
+MACOS_CALENDAR_LIST_CALENDARS=1 macos-calendar-mcp
+```
+
 ## Permissions
 
 macOS asks for Calendar access the first time a tool runs. The prompt names the app that launched the server, such as Terminal, your editor or the MCP client, not `macos-calendar-mcp`. Full access is required. Write-only access counts as denied.
@@ -153,6 +165,17 @@ If the app does not appear in the list, it may be missing the Calendars usage de
 - A calendar shared with you with edit rights looks like your own. EventKit does not expose an owner.
 - Delegate calendars are not read.
 - Changes reach a polling client at its next `get_changes` call, not at once.
+
+## Changelog
+
+### 0.2.0
+
+- List mode: `MACOS_CALENDAR_LIST_CALENDARS=1` prints every calendar and exits.
+- New event fields: `externalId`, `seriesId`, `conferenceUrl`, `created` and `updated`.
+
+### 0.1.0
+
+- First release.
 
 ## License
 
