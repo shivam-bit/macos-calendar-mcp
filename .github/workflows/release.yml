@@ -1,0 +1,36 @@
+name: Release
+on:
+  push:
+    tags: ["v*"]
+permissions:
+  contents: write
+jobs:
+  release:
+    runs-on: macos-15
+    env:
+      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Select Xcode
+        run: sudo xcode-select -s /Applications/Xcode_16.4.app
+      - run: swift --version
+      - run: scripts/build-universal.sh
+      - name: Package
+        run: |
+          ASSET="macos-calendar-mcp-${GITHUB_REF_NAME}-macos-universal.tar.gz"
+          tar -czf "$ASSET" -C npm/bin macos-calendar-mcp
+          shasum -a 256 "$ASSET" > "$ASSET.sha256"
+          echo "ASSET=$ASSET" >> "$GITHUB_ENV"
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            ${{ env.ASSET }}
+            ${{ env.ASSET }}.sha256
+      - name: Publish to npm
+        if: ${{ env.NPM_TOKEN != '' }}
+        working-directory: npm
+        run: |
+          cp ../README.md ../LICENSE .
+          npm version "${GITHUB_REF_NAME#v}" --no-git-tag-version --allow-same-version
+          echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
+          npm publish --access public

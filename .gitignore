@@ -1,0 +1,9 @@
+.build/
+.swiftpm/
+*.sqlite*
+npm/bin/
+*.tgz
+.DS_Store
+.release-prep-report.md
+npm/README.md
+npm/LICENSE

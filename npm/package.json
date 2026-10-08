@@ -1,0 +1,20 @@
+{
+  "name": "macos-calendar-mcp",
+  "version": "0.1.0",
+  "description": "MCP server for macOS Calendar with per-calendar and per-account access control",
+  "bin": {
+    "macos-calendar-mcp": "bin/macos-calendar-mcp"
+  },
+  "os": ["darwin"],
+  "cpu": ["arm64", "x64"],
+  "files": ["bin/macos-calendar-mcp", "README.md", "LICENSE"],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shivam-bit/macos-calendar-mcp.git"
+  },
+  "keywords": ["mcp", "macos", "calendar", "eventkit", "model-context-protocol"],
+  "engines": {
+    "node": ">=18"
+  }
+}
